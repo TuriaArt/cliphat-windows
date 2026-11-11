@@ -14,6 +14,8 @@ Run the installer on Windows 10 (version 1903 or later) or Windows 11 (x64), the
 
 When upgrading, quit ClipHat from its notification-area menu, run the new installer, and launch it again. The sliding panel has no Windows title bar. Settings displays the installed version.
 
+⭐ **Star this repo if ClipHat saves you a trip back to a copied thing.** Questions and ideas are welcome in [Discussions](https://github.com/getguruhat/cliphat-windows/discussions).
+
 ## Use
 
 - Copy text, links, images, or a regular file, then press **Ctrl+Shift+V** to slide history in from the side of the active screen. Choose the left or right edge in Settings.
