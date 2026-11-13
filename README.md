@@ -10,6 +10,15 @@ ClipHat is a native Windows clipboard history app from GuruHat. It stores copied
 
 Download the ready-to-install package: [ClipHat-1.5.3-Windows-Setup.exe](https://github.com/getguruhat/cliphat-windows/releases/download/v1.5.3-windows/ClipHat-1.5.3-Windows-Setup.exe).
 
+Or with [Scoop](https://scoop.sh):
+
+```powershell
+scoop bucket add guruhat https://github.com/getguruhat/scoop-bucket
+scoop install guruhat/cliphat
+```
+
+Update later with `scoop update cliphat`.
+
 Run the installer on Windows 10 (version 1903 or later) or Windows 11 (x64), then launch ClipHat. ClipHat uses the .NET Framework 4.8 that comes with Windows; on an older Windows 10 build without it, the installer links to Microsoft's download. Windows may show a SmartScreen warning because this community build is not code signed.
 
 When upgrading, quit ClipHat from its notification-area menu, run the new installer, and launch it again. The sliding panel has no Windows title bar. Settings displays the installed version.
