@@ -65,6 +65,8 @@ internal sealed record Strings
     public string PinItem { get; init; } = "Pin item";
     public string UnpinItem { get; init; } = "Unpin item";
     public string OpenLink { get; init; } = "Open link";
+    /// Generic "open this file or image in its default application".
+    public string Open { get; init; } = "Open";
     public string Delete { get; init; } = "Delete";
     public string TextMeta { get; init; } = "Text · {0} characters";
     public string Link { get; init; } = "Link";
@@ -167,6 +169,7 @@ internal sealed record Strings
             PinItem = "Fijar elemento",
             UnpinItem = "Desfijar elemento",
             OpenLink = "Abrir enlace",
+            Open = "Abrir",
             Delete = "Eliminar",
             TextMeta = "Texto · {0} caracteres",
             Link = "Enlace",
@@ -257,6 +260,7 @@ internal sealed record Strings
             PinItem = "Eintrag anheften",
             UnpinItem = "Eintrag lösen",
             OpenLink = "Link öffnen",
+            Open = "Öffnen",
             Delete = "Löschen",
             TextMeta = "Text · {0} Zeichen",
             Link = "Link",
@@ -346,6 +350,7 @@ internal sealed record Strings
             PinItem = "Épingler",
             UnpinItem = "Désépingler",
             OpenLink = "Ouvrir le lien",
+            Open = "Ouvrir",
             Delete = "Supprimer",
             TextMeta = "Texte · {0} caractères",
             Link = "Lien",
@@ -435,6 +440,7 @@ internal sealed record Strings
             PinItem = "Fissa elemento",
             UnpinItem = "Sblocca elemento",
             OpenLink = "Apri link",
+            Open = "Apri",
             Delete = "Elimina",
             TextMeta = "Testo · {0} caratteri",
             Link = "Link",
@@ -523,6 +529,7 @@ internal sealed record Strings
             PinItem = "Fixar item",
             UnpinItem = "Desafixar item",
             OpenLink = "Abrir link",
+            Open = "Abrir",
             Delete = "Excluir",
             TextMeta = "Texto · {0} caracteres",
             Link = "Link",
@@ -611,6 +618,7 @@ internal sealed record Strings
             PinItem = "項目をピン留め",
             UnpinItem = "ピン留めを外す",
             OpenLink = "リンクを開く",
+            Open = "開く",
             Delete = "削除",
             TextMeta = "テキスト · {0} 文字",
             Link = "リンク",
@@ -699,6 +707,7 @@ internal sealed record Strings
             PinItem = "固定项目",
             UnpinItem = "取消固定",
             OpenLink = "打开链接",
+            Open = "打开",
             Delete = "删除",
             TextMeta = "文本 · {0} 个字符",
             Link = "链接",
@@ -787,6 +796,7 @@ internal sealed record Strings
             PinItem = "항목 고정",
             UnpinItem = "항목 고정 해제",
             OpenLink = "링크 열기",
+            Open = "열기",
             Delete = "삭제",
             TextMeta = "텍스트 · {0}자",
             Link = "링크",
@@ -877,6 +887,7 @@ internal sealed record Strings
             PinItem = "Закрепить элемент",
             UnpinItem = "Открепить элемент",
             OpenLink = "Открыть ссылку",
+            Open = "Открыть",
             Delete = "Удалить",
             TextMeta = "Текст · {0} символов",
             Link = "Ссылка",

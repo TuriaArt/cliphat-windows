@@ -112,13 +112,19 @@ internal sealed class MainWindow : Form
         RefreshItems();
     }
     private void SaveAndRefresh() { history.Save(); RefreshItems(); }
-    /// Opens the item's content for viewing: text in the viewer window, links in the browser, images and files with their default app.
+    /// Opens the item's content for viewing: text and images in the viewer
+    /// window, links in the browser, files with their default app.
     private void View(ClipItem item)
     {
         var t = Strings.Current;
         try
         {
-            if (item.Kind == "text") new ViewerWindow(item.FileName ?? t.Text, item.Text).Show();
+            if (item.Kind == "text")
+                new ViewerWindow(item.FileName ?? t.Text, item.Text).Show();
+            else if (item.Kind == "image" && item.Payload != null)
+                new ViewerWindow(item.FileName ?? t.ImageCaption, item.Payload).Show();
+            else if (item.Kind is "document" or "audio" && item.Payload != null)
+                new ViewerWindow(item.FileName ?? t.Text, item.Payload, item.Kind).Show();
             else if (item.Kind == "link" && Uri.TryCreate(item.Text, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https")
                 Process.Start(new ProcessStartInfo(item.Text) { UseShellExecute = true });
             else if (item.Payload != null) Process.Start(new ProcessStartInfo(item.Payload) { UseShellExecute = true });
