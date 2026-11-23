@@ -51,7 +51,7 @@ internal static class PanelSmokeTest
             if (panel.Visible) throw new InvalidOperationException("Unpinned panel did not dismiss when another app was activated.");
             CheckStrings();
             // German has the longest text and Japanese needs font fallback; save both for a look.
-            foreach (var culture in new[] { "de-DE", "ja-JP" })
+            foreach (var culture in new[] { "de-DE", "ja-JP", "ru-RU" })
             {
                 Strings.Use(new CultureInfo(culture));
                 using (var localized = new MainWindow(history, _ => { }, () => { }, () => { }))
@@ -68,13 +68,32 @@ internal static class PanelSmokeTest
                 settings.Close();
             }
             Strings.Use(new CultureInfo("en-US"));
+            // The dark theme and an accent: the panel and the settings repaint in the new colors.
+            history.Settings.ThemeMode = "dark"; history.Settings.Accent = "purple";
+            Theme.Apply(history.Settings.ThemeMode, history.Settings.Accent);
+            using (var dark = new MainWindow(history, _ => { }, () => { }, () => { }))
+            {
+                dark.OpenPanel(screen, "Left"); Pump(400);
+                Capture(dark, "screenshots/panel-dark.png");
+            }
+            using (var darkSettings = new SettingsWindow(history))
+            {
+                darkSettings.Show(); Pump(150);
+                foreach (var page in new[] { "General", "History", "Privacy", "About" })
+                {
+                    darkSettings.SelectPage(page); Pump(100); Capture(darkSettings, $"screenshots/settings-{page.ToLowerInvariant()}-dark.png");
+                }
+                darkSettings.Close();
+            }
+            history.Settings.ThemeMode = "light"; history.Settings.Accent = "blue";
+            Theme.Apply(history.Settings.ThemeMode, history.Settings.Accent);
         }
         finally { if (Directory.Exists(folder)) Directory.Delete(folder, true); }
     }
     /// Every translation is picked by its culture, has no empty text, and its templates format.
     private static void CheckStrings()
     {
-        foreach (var name in new[] { "es-ES", "de-DE", "fr-FR", "it-IT", "pt-BR", "ja-JP", "zh-CN", "ko-KR" })
+        foreach (var name in new[] { "es-ES", "de-DE", "fr-FR", "it-IT", "pt-BR", "ja-JP", "zh-CN", "ko-KR", "ru-RU" })
         {
             var strings = Strings.For(new CultureInfo(name));
             var values = typeof(Strings).GetProperties().Where(p => p.PropertyType == typeof(string)).Select(p => (string)p.GetValue(strings)!).ToList();

@@ -8,7 +8,7 @@ ClipHat is a native Windows clipboard history app from GuruHat. It stores copied
 
 ## Download
 
-Download the ready-to-install package: [ClipHat-1.5.3-Windows-Setup.exe](https://github.com/getguruhat/cliphat-windows/releases/download/v1.5.3-windows/ClipHat-1.5.3-Windows-Setup.exe).
+Download the ready-to-install package: [ClipHat-1.5.4-Windows-Setup.exe](https://github.com/getguruhat/cliphat-windows/releases/download/v1.5.4-windows/ClipHat-1.5.4-Windows-Setup.exe).
 
 Or with [Scoop](https://scoop.sh):
 
@@ -49,7 +49,7 @@ dotnet publish ClipHat.csproj -c Release -o publish
 publish\ClipHat.exe --smoke-test   # checks the panel and saves screenshots to screenshots\
 ```
 
-GitHub Actions builds it on every push and packages it with Inno Setup. To publish a release, set the version in `ClipHat.csproj` and `installer.iss`, write `RELEASE_NOTES.md`, and push a matching tag, such as `git tag v1.5.3-windows && git push origin v1.5.3-windows`.
+GitHub Actions builds it on every push and packages it with Inno Setup. To publish a release, set the version in `ClipHat.csproj` and `installer.iss`, write `RELEASE_NOTES.md`, and push a matching tag, such as `git tag v1.5.4-windows && git push origin v1.5.4-windows`.
 
 ### Microsoft Store (MSIX)
 
