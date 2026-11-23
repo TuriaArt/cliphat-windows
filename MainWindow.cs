@@ -12,6 +12,7 @@ internal sealed class MainWindow : Form
     private readonly Panel header = new(), footer = new();
     private readonly Label count = new() { TextAlign = ContentAlignment.MiddleLeft };
     private readonly List<IconButton> filters = [];
+    private readonly List<(IconButton Button, string Label)> localizedButtons = [];
     private readonly IconButton previewButton, pauseButton, tackButton;
     private readonly ToolTip tips = new();
     private readonly System.Windows.Forms.Timer slideTimer = new() { Interval = 15 };
@@ -35,7 +36,7 @@ internal sealed class MainWindow : Form
         FormBorderStyle = FormBorderStyle.None; TopMost = true; ShowInTaskbar = false;
         KeyPreview = true; DoubleBuffered = true; BackColor = Theme.Panel;
         cards.BackColor = Theme.Panel;
-        search.Font = new Font("Segoe UI", 11); search.BackColor = Theme.Panel; search.Visible = false;
+        search.Font = new Font("Segoe UI", 11); search.BackColor = Theme.Input; search.ForeColor = Theme.Ink; search.Visible = false;
         count.Font = new Font("Segoe UI", 9); count.ForeColor = Theme.Ink;
         Controls.AddRange([cards, header, footer, search]);
         var t = Strings.Current;
@@ -63,7 +64,7 @@ internal sealed class MainWindow : Form
     private IconButton AddButton(Control parent, string icon, string label, Action action)
     {
         var button = new IconButton(icon) { AccessibleName = label, AccessibleRole = AccessibleRole.PushButton };
-        button.Click += (_, _) => action(); tips.SetToolTip(button, label); parent.Controls.Add(button); return button;
+        button.Click += (_, _) => action(); tips.SetToolTip(button, label); localizedButtons.Add((button, label)); parent.Controls.Add(button); return button;
     }
     private void Arrange()
     {
@@ -83,12 +84,48 @@ internal sealed class MainWindow : Form
     }
     protected override void OnPaint(PaintEventArgs e)
     {
-        base.OnPaint(e); using var pen = new Pen(Color.FromArgb(181, 202, 218));
+        base.OnPaint(e); using var pen = new Pen(Theme.CardBorder);
         e.Graphics.DrawLine(pen, 0, cards.Top - 1, Width, cards.Top - 1);
         e.Graphics.DrawLine(pen, 0, footer.Top, Width, footer.Top);
     }
     public void TogglePanelPin() { history.Settings.PanelPinned = !PanelPinned; SaveAndRefresh(); }
+    /// Repaints with the current theme: the panel, the search field, and every card.
+    public void ApplyTheme()
+    {
+        BackColor = Theme.Panel;
+        cards.BackColor = Theme.Panel;
+        search.BackColor = Theme.Input;
+        search.ForeColor = Theme.Ink;
+        count.ForeColor = Theme.Ink;
+        RefreshItems();
+    }
+    /// Re-applies the current strings to the buttons and tooltips built at startup.
+    public void ApplyLanguage()
+    {
+        foreach (var (button, label) in localizedButtons)
+        {
+            button.AccessibleName = label;
+            tips.SetToolTip(button, label);
+        }
+        // The placeholder text was sent to the native edit once at startup; resend it.
+        if (search.IsHandleCreated) Native.SendMessage(search.Handle, 0x1501, (IntPtr)1, Strings.Current.SearchPlaceholder);
+        RefreshItems();
+    }
     private void SaveAndRefresh() { history.Save(); RefreshItems(); }
+    /// Opens the item's content for viewing: text in the viewer window, links in the browser, images and files with their default app.
+    private void View(ClipItem item)
+    {
+        var t = Strings.Current;
+        try
+        {
+            if (item.Kind == "text") new ViewerWindow(item.FileName ?? t.Text, item.Text).Show();
+            else if (item.Kind == "link" && Uri.TryCreate(item.Text, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https")
+                Process.Start(new ProcessStartInfo(item.Text) { UseShellExecute = true });
+            else if (item.Payload != null) Process.Start(new ProcessStartInfo(item.Payload) { UseShellExecute = true });
+            else Clipboard.SetText(item.Text);
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.Security.SecurityException) { MessageBox.Show(e.Message, "ClipHat", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+    }
     public void OpenPanel(Screen screen, string side)
     {
         slideTimer.Stop(); closing = false; edgeArea = screen.WorkingArea;
@@ -164,6 +201,7 @@ internal sealed class MainWindow : Form
             };
             card.Delete += () => { history.Remove(item); RefreshItems(); };
             card.Pin += () => { item.Pinned = !item.Pinned; SaveAndRefresh(); };
+            card.View += () => View(item);
             tips.SetToolTip(card, item.FileName != null ? item.Text : t.CardTip);
             cards.Controls.Add(card);
         }

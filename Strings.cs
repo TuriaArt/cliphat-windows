@@ -61,6 +61,7 @@ internal sealed record Strings
 
     // Cards
     public string CopyToClipboard { get; init; } = "Copy to clipboard";
+    public string ViewItem { get; init; } = "View item";
     public string PinItem { get; init; } = "Pin item";
     public string UnpinItem { get; init; } = "Unpin item";
     public string OpenLink { get; init; } = "Open link";
@@ -80,6 +81,12 @@ internal sealed record Strings
     public string TabHistory { get; init; } = "History";
     public string TabPrivacy { get; init; } = "Privacy";
     public string TabAbout { get; init; } = "About";
+    public string Language { get; init; } = "Language";
+    public string Theme { get; init; } = "Theme";
+    public string Light { get; init; } = "Light";
+    public string Dark { get; init; } = "Dark";
+    public string AccentColor { get; init; } = "Accent color";
+    public string SystemDefault { get; init; } = "System default";
     public string LaunchAtLogin { get; init; } = "Launch ClipHat at login";
     public string KeyboardShortcut { get; init; } = "Keyboard shortcut";
     public string LargePreviewsSetting { get; init; } = "Large image and document previews (2× cards)";
@@ -156,6 +163,7 @@ internal sealed record Strings
             OneItem = "1 elemento",
             Items = "{0} elementos",
             CopyToClipboard = "Copiar al portapapeles",
+            ViewItem = "Ver elemento",
             PinItem = "Fijar elemento",
             UnpinItem = "Desfijar elemento",
             OpenLink = "Abrir enlace",
@@ -171,6 +179,12 @@ internal sealed record Strings
             TabHistory = "Historial",
             TabPrivacy = "Privacidad",
             TabAbout = "Acerca de",
+            Language = "Idioma",
+            Theme = "Tema",
+            Light = "Claro",
+            Dark = "Oscuro",
+            AccentColor = "Color de acento",
+            SystemDefault = "Predeterminado del sistema",
             LaunchAtLogin = "Abrir ClipHat al iniciar sesión",
             KeyboardShortcut = "Atajo de teclado",
             LargePreviewsSetting = "Vistas previas grandes de imágenes y documentos (tarjetas 2×)",
@@ -239,6 +253,7 @@ internal sealed record Strings
             OneItem = "1 Eintrag",
             Items = "{0} Einträge",
             CopyToClipboard = "In die Zwischenablage kopieren",
+            ViewItem = "Eintrag anzeigen",
             PinItem = "Eintrag anheften",
             UnpinItem = "Eintrag lösen",
             OpenLink = "Link öffnen",
@@ -254,6 +269,12 @@ internal sealed record Strings
             TabHistory = "Verlauf",
             TabPrivacy = "Datenschutz",
             TabAbout = "Info",
+            Language = "Sprache",
+            Theme = "Design",
+            Light = "Hell",
+            Dark = "Dunkel",
+            AccentColor = "Akzentfarbe",
+            SystemDefault = "Systemvorgabe",
             LaunchAtLogin = "ClipHat bei der Anmeldung starten",
             KeyboardShortcut = "Tastenkombination",
             LargePreviewsSetting = "Große Vorschau für Bilder und Dokumente (2× Karten)",
@@ -321,6 +342,7 @@ internal sealed record Strings
             OneItem = "1 élément",
             Items = "{0} éléments",
             CopyToClipboard = "Copier dans le presse-papiers",
+            ViewItem = "Afficher l'élément",
             PinItem = "Épingler",
             UnpinItem = "Désépingler",
             OpenLink = "Ouvrir le lien",
@@ -336,6 +358,12 @@ internal sealed record Strings
             TabHistory = "Historique",
             TabPrivacy = "Confidentialité",
             TabAbout = "À propos",
+            Language = "Langue",
+            Theme = "Thème",
+            Light = "Clair",
+            Dark = "Sombre",
+            AccentColor = "Couleur d'accent",
+            SystemDefault = "Par défaut du système",
             LaunchAtLogin = "Lancer ClipHat à l'ouverture de session",
             KeyboardShortcut = "Raccourci clavier",
             LargePreviewsSetting = "Grands aperçus des images et documents (cartes 2×)",
@@ -403,6 +431,7 @@ internal sealed record Strings
             OneItem = "1 elemento",
             Items = "{0} elementi",
             CopyToClipboard = "Copia negli appunti",
+            ViewItem = "Visualizza elemento",
             PinItem = "Fissa elemento",
             UnpinItem = "Sblocca elemento",
             OpenLink = "Apri link",
@@ -418,6 +447,12 @@ internal sealed record Strings
             TabHistory = "Cronologia",
             TabPrivacy = "Privacy",
             TabAbout = "Informazioni",
+            Language = "Lingua",
+            Theme = "Tema",
+            Light = "Chiaro",
+            Dark = "Scura",
+            AccentColor = "Colore di accento",
+            SystemDefault = "Predefinito di sistema",
             LaunchAtLogin = "Avvia ClipHat all'accesso",
             KeyboardShortcut = "Scelta rapida da tastiera",
             LargePreviewsSetting = "Anteprime grandi di immagini e documenti (schede 2×)",
@@ -484,6 +519,7 @@ internal sealed record Strings
             OneItem = "1 item",
             Items = "{0} itens",
             CopyToClipboard = "Copiar para a área de transferência",
+            ViewItem = "Ver item",
             PinItem = "Fixar item",
             UnpinItem = "Desafixar item",
             OpenLink = "Abrir link",
@@ -499,6 +535,12 @@ internal sealed record Strings
             TabHistory = "Histórico",
             TabPrivacy = "Privacidade",
             TabAbout = "Sobre",
+            Language = "Idioma",
+            Theme = "Tema",
+            Light = "Claro",
+            Dark = "Escuro",
+            AccentColor = "Cor de destaque",
+            SystemDefault = "Padrão do sistema",
             LaunchAtLogin = "Abrir o ClipHat ao entrar no Windows",
             KeyboardShortcut = "Atalho de teclado",
             LargePreviewsSetting = "Visualizações grandes de imagens e documentos (cartões 2×)",
@@ -565,6 +607,7 @@ internal sealed record Strings
             OneItem = "1 件",
             Items = "{0} 件",
             CopyToClipboard = "クリップボードにコピー",
+            ViewItem = "要素を表示",
             PinItem = "項目をピン留め",
             UnpinItem = "ピン留めを外す",
             OpenLink = "リンクを開く",
@@ -580,6 +623,12 @@ internal sealed record Strings
             TabHistory = "履歴",
             TabPrivacy = "プライバシー",
             TabAbout = "情報",
+            Language = "言語",
+            Theme = "テーマ",
+            Light = "明るい",
+            Dark = "ダーク",
+            AccentColor = "アクセントカラー",
+            SystemDefault = "システムの既定",
             LaunchAtLogin = "サインイン時に ClipHat を起動",
             KeyboardShortcut = "キーボード ショートカット",
             LargePreviewsSetting = "画像とドキュメントを大きくプレビュー (2 倍のカード)",
@@ -646,6 +695,7 @@ internal sealed record Strings
             OneItem = "1 项",
             Items = "{0} 项",
             CopyToClipboard = "复制到剪贴板",
+            ViewItem = "查看项目",
             PinItem = "固定项目",
             UnpinItem = "取消固定",
             OpenLink = "打开链接",
@@ -661,6 +711,12 @@ internal sealed record Strings
             TabHistory = "历史记录",
             TabPrivacy = "隐私",
             TabAbout = "关于",
+            Language = "语言",
+            Theme = "主题",
+            Light = "浅色",
+            Dark = "深色",
+            AccentColor = "强调色",
+            SystemDefault = "系统默认",
             LaunchAtLogin = "登录时启动 ClipHat",
             KeyboardShortcut = "键盘快捷键",
             LargePreviewsSetting = "大尺寸预览图片和文档 (2 倍卡片)",
@@ -727,6 +783,7 @@ internal sealed record Strings
             OneItem = "항목 1개",
             Items = "항목 {0}개",
             CopyToClipboard = "클립보드에 복사",
+            ViewItem = "항목 보기",
             PinItem = "항목 고정",
             UnpinItem = "항목 고정 해제",
             OpenLink = "링크 열기",
@@ -742,6 +799,12 @@ internal sealed record Strings
             TabHistory = "기록",
             TabPrivacy = "개인 정보",
             TabAbout = "정보",
+            Language = "언어",
+            Theme = "테마",
+            Light = "밝은",
+            Dark = "어두운",
+            AccentColor = "강조색",
+            SystemDefault = "시스템 기본값",
             LaunchAtLogin = "로그인할 때 ClipHat 시작",
             KeyboardShortcut = "바로 가기 키",
             LargePreviewsSetting = "이미지와 문서 크게 미리 보기 (2배 카드)",
@@ -777,8 +840,124 @@ internal sealed record Strings
             Thanks = "이 프로젝트를 후원해 주셔서 감사합니다!",
             UpdateTitle = "{0} {1} 업데이트가 있습니다",
             UpdateMessage = "현재 버전은 {0}입니다. GitHub에서 새 버전을 다운로드할까요?"
+        },
+        ["ru"] = new()
+        {
+            Ctrl = "Ctrl",
+            Shift = "Shift",
+            OpenHistory = "Открыть историю",
+            PauseCapture = "Приостановить запись",
+            Settings = "Настройки",
+            Quit = "Выйти",
+            StartupBlocked = "ClipHat был отключён в настройках запуска Windows. Чтобы снова запускать его при входе в систему, включите его в Настройки › Приложения › Запуск.",
+            SearchTip = "Поиск ({0})",
+            AllItems = "Все элементы",
+            Text = "Текст",
+            Links = "Ссылки",
+            Images = "Изображения",
+            Documents = "Документы",
+            Audio = "Аудио",
+            LargePreviews = "Большой предпросмотр изображений и файлов",
+            PauseCaptureTip = "Приостановить запись буфера обмена",
+            ResumeCaptureTip = "Возобновить запись буфера обмена",
+            KeepPanelOpen = "Оставлять панель открытой",
+            UnpinPanel = "Открепить панель — автоматическое закрытие",
+            SearchPlaceholder = "Поиск в буфере обмена…",
+            Today = "Сегодня",
+            Yesterday = "Вчера",
+            DayFormat = "d MMMM",
+            CardTip = "Нажмите для копирования • правый клик — для других действий",
+            Tagline = "Никогда не теряйте то, что копировали.",
+            EmptyHint = "Скопируйте текст, ссылку, изображение или файл, чтобы начать.",
+            NoMatches = "Подходящих элементов нет",
+            OneItem = "1 элемент",
+            Items = "{0} элементов",
+            CopyToClipboard = "Скопировать в буфер обмена",
+            ViewItem = "Просмотреть",
+            PinItem = "Закрепить элемент",
+            UnpinItem = "Открепить элемент",
+            OpenLink = "Открыть ссылку",
+            Delete = "Удалить",
+            TextMeta = "Текст · {0} символов",
+            Link = "Ссылка",
+            Image = "Изображение",
+            Clipboard = "Буфер обмена",
+            FileOfType = "Файл {0}",
+            ImageCaption = "Изображение {0} × {1}",
+            SettingsTitle = "Настройки ClipHat",
+            TabGeneral = "Общие",
+            TabHistory = "История",
+            TabPrivacy = "Конфиденциальность",
+            TabAbout = "О программе",
+            Language = "Язык",
+            Theme = "Тема",
+            Light = "Светлая",
+            Dark = "Тёмная",
+            AccentColor = "Акцентный цвет",
+            SystemDefault = "Системная настройка",
+            LaunchAtLogin = "Запускать ClipHat при входе в систему",
+            KeyboardShortcut = "Комбинация клавиш",
+            LargePreviewsSetting = "Большой предпросмотр изображений и документов (карты 2×)",
+            KeepOpenSetting = "Оставлять панель открытой (булавка)",
+            PanelPosition = "Положение панели",
+            Left = "Слева",
+            Right = "Справа",
+            CopyHint = "Выберите элемент, чтобы скопировать его, затем нажмите {0}, чтобы вставить.",
+            QuitClipHat = "Завершить ClipHat",
+            KeepItems = "Сохранять элементы буфера обмена",
+            KeepItemsNote = "Сначала удаляются самые старые незакреплённые элементы. Закреплённые элементы всегда сохраняются.",
+            SaveHeading = "Хранение",
+            TextAndLinks = "Текст и ссылки",
+            DocumentsAndFiles = "Документы и другие файлы",
+            SizeLimits = "До 1 МБ на текст, 10 МБ на изображение и 20 МБ на файл. Каталоги не поддерживаются.",
+            ClearUnpinned = "Очистить незакреплённые",
+            ClearUnpinnedConfirm = "Удалить всю историю незакреплённых элементов?",
+            ClearAll = "Очистить всю историю…",
+            ClearAllConfirm = "Постоянно удалить всю историю, включая закреплённые элементы?",
+            IgnoredApps = "Игнорируемые приложения",
+            IgnoredAppsNote = "Содержимое, скопированное из этих приложений, не сохраняется.",
+            AddApplication = "Добавить приложение…",
+            IgnoreDialogTitle = "Игнорировать буфер обмена приложения",
+            ApplicationsFilter = "Приложения (*.exe)|*.exe",
+            Remove = "Убрать",
+            PrivacyNote = "Всё остаётся на этом компьютере. Материалы, помеченные как конфиденциальные, пропускаются. Некоторые приложения не ставят такие метки; добавьте любые приложения, которые хотите исключить.",
+            StorageNote = "История хранится локально в AppData\\Local. Исключения применяются к новым копируемым материалам; существующую историю очищайте отдельно.",
+            AppIconName = "Значок приложения ClipHat",
+            VersionLine = "Версия {0} · Часть GuruHat",
+            License = "Бесплатно и с открытым исходным кодом · Лицензия MIT",
+            NoTracking = "Без учётных записей. Без облака. Без аналитики.",
+            Support = "Поддержать ClipHat",
+            Thanks = "Спасибо за поддержку этого проекта!",
+            UpdateTitle = "Доступна версия {0} {1}",
+            UpdateMessage = "У вас версия {0}. Скачать новую версию с GitHub?"
         }
     };
+
+    /// The languages offered in Settings, with their native names: English, Español, …
+    public static readonly (string Code, string Name)[] Languages =
+    [
+        ("en", "English"),
+        ("es", "Español"),
+        ("de", "Deutsch"),
+        ("fr", "Français"),
+        ("it", "Italiano"),
+        ("pt", "Português"),
+        ("ja", "日本語"),
+        ("zh-Hans", "简体中文"),
+        ("ko", "한국어"),
+        ("ru", "Русский")
+    ];
+
+    /// The culture the app shows: a saved language code, or the Windows display language.
+    /// An unknown code falls back to the display language, so a corrupt setting can't break the UI.
+    public static CultureInfo Resolve(string? code)
+    {
+        if (!string.IsNullOrEmpty(code))
+        {
+            try { return new CultureInfo(code); } catch (CultureNotFoundException) { }
+        }
+        return CultureInfo.CurrentUICulture;
+    }
 
     /// The language the app shows; the smoke test switches it with <see cref="Use"/>.
     /// Declared after the tables it reads, since static fields start in order.

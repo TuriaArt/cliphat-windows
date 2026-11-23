@@ -48,6 +48,12 @@ internal sealed class Settings
     public string PanelSide { get; set; } = "Left";
     public bool PanelPinned { get; set; }
     public bool LargePreviews { get; set; }
+    /// The theme: "light" or "dark".
+    public string ThemeMode { get; set; } = "light";
+    /// The accent preset's code, as in <see cref="Theme.Accents"/>.
+    public string Accent { get; set; } = "blue";
+    /// A language code from <see cref="Strings.Languages"/>, or null to follow the Windows display language.
+    public string? Language { get; set; }
     /// The newest version the update dialog was shown for, so it asks once per version.
     public string? AnnouncedUpdate { get; set; }
     public List<string> IgnoredApps { get; set; } = ["1Password", "Bitwarden", "KeePass", "KeePassXC", "Dashlane", "Enpass"];
@@ -131,24 +137,29 @@ internal sealed class ClipHatContext : ApplicationContext
     /// The first update check runs a minute after launch, then once a day.
     private readonly Timer updateTimer = new() { Interval = 60 * 1000 };
     private readonly ToolStripMenuItem update = new() { Visible = false };
+    private readonly List<(ToolStripMenuItem Item, Func<Strings, string> Text)> trayMenu = [];
     private string? updatePage;
+    private string? updateVersion;
     private uint sequence;
     private bool restoring;
     private const int Hotkey = 0x4231;
     public ClipHatContext(bool showHistory = false)
     {
+        Theme.Apply(history.Settings.ThemeMode, history.Settings.Accent);
+        Strings.Use(Strings.Resolve(history.Settings.Language));
         window = new MainWindow(history, Restore, OpenSettings, Quit);
         window.FormClosing += (_, e) => { if (e.CloseReason != CloseReason.ApplicationExitCall) { e.Cancel = true; window.ClosePanel(); } };
         window.HotkeyPressed += () => { if (window.Visible) window.ClosePanel(); else Show(); };
         tray = new NotifyIcon { Icon = TrayIcon(), Text = "ClipHat — " + Strings.Current.HistoryShortcut, Visible = true };
         tray.DoubleClick += (_, _) => Show();
-        tray.ContextMenuStrip = new ContextMenuStrip();
+        tray.ContextMenuStrip = new ContextMenuStrip { Renderer = new ThemeRenderer() };
         update.Click += (_, _) => { if (updatePage is not null) Open(updatePage); };
         tray.ContextMenuStrip.Items.Add(update);
-        tray.ContextMenuStrip.Items.Add(Strings.Current.OpenHistory, null, (_, _) => Show());
-        tray.ContextMenuStrip.Items.Add(Strings.Current.PauseCapture, null, (_, _) => TogglePause());
-        tray.ContextMenuStrip.Items.Add(Strings.Current.Settings, null, (_, _) => OpenSettings());
-        tray.ContextMenuStrip.Items.Add(Strings.Current.Quit, null, (_, _) => Quit());
+        TrayItem(Strings.Current.OpenHistory, (_, _) => Show(), s => s.OpenHistory);
+        TrayItem(Strings.Current.PauseCapture, (_, _) => TogglePause(), s => s.PauseCapture);
+        TrayItem(Strings.Current.Settings, (_, _) => OpenSettings(), s => s.Settings);
+        TrayItem(Strings.Current.Quit, (_, _) => Quit(), s => s.Quit);
+        tray.ContextMenuStrip.Items.AddRange(trayMenu.Select(x => x.Item).ToArray());
         timer = new Timer { Interval = 750 };
         timer.Tick += (_, _) => Poll();
         sequence = Native.GetClipboardSequenceNumber();
@@ -175,6 +186,7 @@ internal sealed class ClipHatContext : ApplicationContext
         var text = Strings.Current;
         var title = string.Format(text.UpdateTitle, "ClipHat", release.Version);
         updatePage = release.Page;
+        updateVersion = release.Version.ToString();
         update.Text = title + " ›";
         update.Visible = true;
         if (history.Settings.AnnouncedUpdate == release.Version.ToString()) return;
@@ -281,9 +293,23 @@ internal sealed class ClipHatContext : ApplicationContext
         catch (Exception e) when (e is ExternalException or IOException or UnauthorizedAccessException) { MessageBox.Show(e.Message, "ClipHat", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         finally { restoring = false; }
     }
+    /// Adds a notification-area menu item, remembered so its text follows the language.
+    private void TrayItem(string text, EventHandler onClick, Func<Strings, string> label) => trayMenu.Add((new ToolStripMenuItem(text, null, onClick), label));
+    /// Applies the appearance and language the settings window just saved, everywhere.
+    private void OnSettingsChanged()
+    {
+        Theme.Apply(history.Settings.ThemeMode, history.Settings.Accent);
+        Strings.Use(Strings.Resolve(history.Settings.Language));
+        var text = Strings.Current;
+        tray.Text = "ClipHat — " + text.HistoryShortcut;
+        foreach (var (item, label) in trayMenu) item.Text = label(text);
+        if (update.Visible && updateVersion != null) update.Text = string.Format(text.UpdateTitle, "ClipHat", updateVersion) + " ›";
+        window.ApplyTheme();
+        window.ApplyLanguage();
+    }
     private void OpenSettings()
     {
-        using var settings = new SettingsWindow(history, Quit);
+        using var settings = new SettingsWindow(history, Quit, OnSettingsChanged);
         settings.ShowDialog();
         history.Trim(); window.RefreshItems();
     }

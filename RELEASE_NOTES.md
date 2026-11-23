@@ -1,9 +1,14 @@
 ClipHat keeps a history of what you copy on Windows: text, links, images, and files. Press **Ctrl+Shift+V** to slide it in, then click anything to copy it again.
 
 **Install**
-1. Download `ClipHat-1.5.3-Windows-Setup.exe` below and run it.
+1. Download `ClipHat-1.5.4-Windows-Setup.exe` below and run it.
 2. If Windows SmartScreen says it protected your PC, choose **More info › Run anyway**. The installer isn't code-signed yet.
 3. Copy something, then press **Ctrl+Shift+V**.
+
+**What's new in 1.5.4**
+- Russian interface, with a language selector in Settings: pick any of the supported languages, or leave it on **System default** to follow your Windows display language
+- A dark theme in Settings › General, with six accent colors to choose from (blue, purple, green, orange, red, teal) — the whole panel, history cards, and menus are repainted in the selected colors
+- Each history card has a view button (and a **View item** command in its right-click menu) that opens its content for reading: text in a viewer window, links in the browser, images and files in their default app
 
 **What's new in 1.5.3**
 - ClipHat tells you when a new version is out. It checks GitHub once a day, asks once per version whether to download it, and adds the update to the notification-area menu. The Microsoft Store version is updated by the Store instead

@@ -3,9 +3,56 @@ using System.Drawing.Drawing2D;
 
 namespace ClipHat;
 
+internal enum ThemeMode { Light, Dark }
+
+/// The colors the UI is painted with. Everything is computed from the selected
+/// mode and accent, so switching the theme or the accent repaints the whole app.
 internal static class Theme
 {
-    public static readonly Color Panel = Color.FromArgb(216, 232, 245), Ink = Color.FromArgb(36, 42, 48), Muted = Color.FromArgb(114, 130, 142), Blue = Color.FromArgb(0, 122, 255);
+    /// The accent presets offered in Settings: (code, display name, color).
+    public static readonly (string Code, string Name, Color Color)[] Accents =
+    [
+        ("blue", "Blue", Color.FromArgb(0, 122, 255)),
+        ("purple", "Purple", Color.FromArgb(142, 68, 173)),
+        ("green", "Green", Color.FromArgb(34, 160, 107)),
+        ("orange", "Orange", Color.FromArgb(230, 126, 34)),
+        ("red", "Red", Color.FromArgb(192, 57, 43)),
+        ("teal", "Teal", Color.FromArgb(22, 168, 168))
+    ];
+
+    public static ThemeMode Mode { get; private set; } = ThemeMode.Light;
+    public static Color Accent { get; private set; } = Accents[0].Color;
+
+    /// Applies the saved appearance. Unknown values fall back to the defaults.
+    public static void Apply(string mode, string accentCode)
+    {
+        Mode = mode == "dark" ? ThemeMode.Dark : ThemeMode.Light;
+        Accent = AccentOf(accentCode);
+    }
+
+    public static Color AccentOf(string code)
+    {
+        foreach (var accent in Accents) if (string.Equals(accent.Code, code, StringComparison.OrdinalIgnoreCase)) return accent.Color;
+        return Accents[0].Color;
+    }
+
+    public static Color WithAlpha(Color color, int alpha) => Color.FromArgb(alpha, color);
+
+    private static bool Dark => Mode == ThemeMode.Dark;
+    public static Color Panel => Dark ? Color.FromArgb(30, 32, 39) : Color.FromArgb(216, 232, 245);
+    public static Color Card => Dark ? Color.FromArgb(42, 45, 54) : Color.FromArgb(249, 252, 255);
+    public static Color CardBorder => Dark ? Color.FromArgb(59, 65, 80) : Color.FromArgb(181, 202, 218);
+    public static Color Divider => Dark ? Color.FromArgb(51, 55, 67) : Color.FromArgb(228, 232, 237);
+    public static Color Hover => Dark ? Color.FromArgb(53, 58, 70) : Color.FromArgb(239, 247, 255);
+    public static Color Ink => Dark ? Color.FromArgb(232, 236, 242) : Color.FromArgb(36, 42, 48);
+    public static Color Muted => Dark ? Color.FromArgb(150, 160, 178) : Color.FromArgb(114, 130, 142);
+    public static Color Danger => Dark ? Color.FromArgb(255, 107, 115) : Color.FromArgb(255, 64, 72);
+    public static Color Input => Dark ? Color.FromArgb(35, 37, 43) : Color.FromArgb(255, 255, 255);
+    public static Color Surround => Dark ? Color.FromArgb(24, 25, 30) : Color.FromArgb(244, 245, 247);
+    public static Color IconTile => Dark ? Color.FromArgb(35, 37, 43) : Color.FromArgb(255, 255, 255);
+    /// The link icon's color; medium purple in light, a lighter purple in dark.
+    public static Color Link => Dark ? Color.FromArgb(183, 155, 216) : Color.FromArgb(123, 94, 167);
+
     public static GraphicsPath Rounded(RectangleF r, float radius)
     {
         var p = new GraphicsPath(); float d = Math.Min(radius * 2, Math.Min(r.Width, r.Height));
@@ -22,6 +69,7 @@ internal static class Theme
         switch (name)
         {
             case "search": g.DrawEllipse(p, 3, 3, 12, 12); g.DrawLine(p, 14, 14, 21, 21); break;
+            case "view": g.DrawEllipse(p, 3, 7, 18, 11); g.FillEllipse(brush, 10, 11, 4, 4); break;
             case "all": foreach (var x in new[] { 3, 14 }) foreach (var y in new[] { 3, 14 }) g.DrawRectangle(p, x, y, 7, 7); break;
             case "text": using (var f = new Font("Segoe UI", 19, FontStyle.Regular, GraphicsUnit.Pixel)) g.DrawString("Aa", f, brush, -1, 0); break;
             case "link":
@@ -53,9 +101,9 @@ internal sealed class IconButton : Button
     protected override void OnPaint(PaintEventArgs e)
     {
         e.Graphics.Clear(Parent?.BackColor ?? Theme.Panel); e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-        if (Active || ClientRectangle.Contains(PointToClient(Cursor.Position))) { using var b = new SolidBrush(Color.FromArgb(239, 247, 255)); using var p = Theme.Rounded(new RectangleF(1, 1, Width - 2, Height - 2), 8 * DeviceDpi / 96f); e.Graphics.FillPath(b, p); }
+        if (Active || ClientRectangle.Contains(PointToClient(Cursor.Position))) { using var b = new SolidBrush(Theme.Hover); using var p = Theme.Rounded(new RectangleF(1, 1, Width - 2, Height - 2), 8 * DeviceDpi / 96f); e.Graphics.FillPath(b, p); }
         float size = 21 * DeviceDpi / 96f;
-        Theme.Icon(e.Graphics, IconName, new RectangleF((Width - size) / 2, (Height - size) / 2, size, size), Active ? Theme.Blue : Theme.Muted);
+        Theme.Icon(e.Graphics, IconName, new RectangleF((Width - size) / 2, (Height - size) / 2, size, size), Active ? Theme.Accent : Theme.Muted);
         if (Focused && ShowFocusCues) ControlPaint.DrawFocusRectangle(e.Graphics, Rectangle.Inflate(ClientRectangle, -3, -3));
     }
 }
@@ -63,13 +111,13 @@ internal sealed class IconButton : Button
 internal sealed class HistoryCard : Control
 {
     public ClipItem Item { get; }
-    public event Action? Restore, Delete, Pin;
+    public event Action? Restore, Delete, Pin, View;
     private readonly bool large;
     private bool selected, dragging;
     private Point down;
     private Image? thumbnail;
     private Size originalSize;
-    private readonly ContextMenuStrip menu = new();
+    private readonly ContextMenuStrip menu = new() { Renderer = new ThemeRenderer() };
     public bool Selected { get => selected; set { selected = value; Invalidate(); } }
     private float S => DeviceDpi / 96f;
     public HistoryCard(ClipItem item, bool largePreview)
@@ -86,6 +134,7 @@ internal sealed class HistoryCard : Control
         }
         var t = Strings.Current;
         menu.Items.Add(t.CopyToClipboard, null, (_, _) => Restore?.Invoke());
+        menu.Items.Add(t.ViewItem, null, (_, _) => View?.Invoke());
         menu.Items.Add(item.Pinned ? t.UnpinItem : t.PinItem, null, (_, _) => Pin?.Invoke());
         if (item.Kind == "link") menu.Items.Add(t.OpenLink, null, (_, _) => { if (Uri.TryCreate(item.Text, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https") Process.Start(new ProcessStartInfo(item.Text) { UseShellExecute = true }); });
         menu.Items.Add(t.Delete, null, (_, _) => Delete?.Invoke()); ContextMenuStrip = menu;
@@ -98,12 +147,14 @@ internal sealed class HistoryCard : Control
     {
         base.OnPaint(e); var g = e.Graphics; g.SmoothingMode = SmoothingMode.AntiAlias;
         using var shape = Theme.Rounded(new RectangleF(1, 1, Width - 3, Height - 3), 13 * S);
-        using var white = new SolidBrush(Color.FromArgb(249, 252, 255)); g.FillPath(white, shape);
-        if (Selected) { using var outline = new Pen(Theme.Blue, 2 * S); g.DrawPath(outline, shape); }
-        using var red = new SolidBrush(Color.FromArgb(255, 64, 72)); g.FillEllipse(red, 14 * S, 14 * S, 10 * S, 10 * S);
-        using var cross = new Pen(Color.White, S); g.DrawLine(cross, 17 * S, 17 * S, 21 * S, 21 * S); g.DrawLine(cross, 21 * S, 17 * S, 17 * S, 21 * S);
+        using var surface = new SolidBrush(Theme.Card); g.FillPath(surface, shape);
+        if (Selected) { using var outline = new Pen(Theme.Accent, 2 * S); g.DrawPath(outline, shape); }
+        using var red = new SolidBrush(Theme.Danger); g.FillEllipse(red, 14 * S, 14 * S, 10 * S, 10 * S);
+        using var cross = new Pen(Theme.Ink, S); g.DrawLine(cross, 17 * S, 17 * S, 21 * S, 21 * S); g.DrawLine(cross, 21 * S, 17 * S, 17 * S, 21 * S);
+        // The view button sits next to delete; both are 16×16-DPI hit areas.
+        Theme.Icon(g, "view", new RectangleF(30 * S, 14 * S, 10 * S, 10 * S), Theme.Muted);
         DrawText(g, Item.CopiedAt.ToLocalTime().ToString("t"), new RectangleF(Width - 108 * S, 12 * S, 91 * S, 20 * S), 10, Theme.Muted, false, StringAlignment.Far);
-        if (Item.Pinned) Theme.Icon(g, "pin", new RectangleF(31 * S, 12 * S, 13 * S, 13 * S), Theme.Blue);
+        if (Item.Pinned) Theme.Icon(g, "pin", new RectangleF(42 * S, 12 * S, 13 * S, 13 * S), Theme.Accent);
         float left = 70 * S;
         if (large)
         {
@@ -118,8 +169,8 @@ internal sealed class HistoryCard : Control
             if (thumbnail != null) { DrawImage(g, thumbnail, new Rectangle((int)(14 * S), (int)(39 * S), (int)(80 * S), (int)(63 * S))); left = 105 * S; }
             else
             {
-                using var tile = Theme.Rounded(new RectangleF(14 * S, 39 * S, 44 * S, 44 * S), 10 * S); g.FillPath(Brushes.White, tile);
-                Theme.Icon(g, Item.Kind, new RectangleF(23 * S, 48 * S, 26 * S, 26 * S), Item.Kind == "link" ? Color.MediumPurple : Theme.Blue);
+                using var tile = Theme.Rounded(new RectangleF(14 * S, 39 * S, 44 * S, 44 * S), 10 * S); g.FillPath(new SolidBrush(Theme.IconTile), tile);
+                Theme.Icon(g, Item.Kind, new RectangleF(23 * S, 48 * S, 26 * S, 26 * S), Item.Kind == "link" ? Theme.Link : Theme.Accent);
             }
             DrawText(g, (Item.FileName ?? Item.Text).Replace('\r', ' ').Replace('\n', ' '), new RectangleF(left, 39 * S, Width - left - 13 * S, 24 * S), 12, Theme.Ink, true);
             DrawText(g, Metadata(), new RectangleF(left, 65 * S, Width - left - 13 * S, 20 * S), 10.5f, Theme.Muted);
@@ -165,7 +216,9 @@ internal sealed class HistoryCard : Control
     protected override void OnMouseUp(MouseEventArgs e)
     {
         base.OnMouseUp(e); if (e.Button != MouseButtons.Left || dragging) return;
-        if (new RectangleF(7 * S, 7 * S, 26 * S, 26 * S).Contains(e.Location)) Delete?.Invoke(); else Restore?.Invoke();
+        var view = new RectangleF(27 * S, 11 * S, 16 * S, 16 * S);
+        var del = new RectangleF(11 * S, 11 * S, 16 * S, 16 * S);
+        if (view.Contains(e.Location)) View?.Invoke(); else if (del.Contains(e.Location)) Delete?.Invoke(); else Restore?.Invoke();
     }
     protected override void Dispose(bool disposing) { if (disposing) { thumbnail?.Dispose(); menu.Dispose(); } base.Dispose(disposing); }
 }
