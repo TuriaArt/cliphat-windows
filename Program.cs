@@ -250,7 +250,7 @@ internal sealed class ClipHatContext : ApplicationContext
             {
                 var value = data.GetData(DataFormats.UnicodeText) as string;
                 if (!string.IsNullOrWhiteSpace(value) && Encoding.UTF8.GetByteCount(value) <= 1024 * 1024)
-                    item = new ClipItem { Kind = Uri.TryCreate(value, UriKind.Absolute, out var url) && (url.Scheme == "https" || url.Scheme == "http") ? "link" : "text", Text = value };
+                    item = new ClipItem { Kind = Uri.TryCreate(value, UriKind.Absolute, out var url) && (url.Scheme == "https" || url.Scheme == "http") ? "link" : "text", Text = value! };
             }
             if (item == null) return;
             item.Source = source;

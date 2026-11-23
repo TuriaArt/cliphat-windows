@@ -196,7 +196,7 @@ internal sealed class SettingsWindow : Form
         combo.SelectedIndex = index < 0 ? 0 : index + 1;
         combo.SelectedIndexChanged += (_, _) =>
         {
-            if (combo.SelectedItem is not (string? code, string _)) return;
+            if (combo.SelectedItem is not (string code, string _)) return;
             // A saved language that no longer exists falls back to the display language.
             change(code is { Length: > 0 } ? code : null);
         };
