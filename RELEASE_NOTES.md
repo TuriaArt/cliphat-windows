@@ -8,7 +8,7 @@ ClipHat keeps a history of what you copy on Windows: text, links, images, and fi
 **What's new in 1.5.4**
 - Russian interface, with a language selector in Settings: pick any of the supported languages, or leave it on **System default** to follow your Windows display language
 - A dark theme in Settings › General, with six accent colors to choose from (blue, purple, green, orange, red, teal) — the whole panel, history cards, and menus are repainted in the selected colors
-- Each history card has a view button (and a **View item** command in its right-click menu) that opens its content for reading: text in a viewer window, links in the browser, images and files in their default app
+- Each history card has a view button (and a **View item** command in its right-click menu) that opens its content for viewing in a larger window: the full copied text, scrollable in a wide reader; images shown zoomed to fit the window; files shown with their name, type, and size, with an **Open** button for the default app — links open in the browser
 
 **What's new in 1.5.3**
 - ClipHat tells you when a new version is out. It checks GitHub once a day, asks once per version whether to download it, and adds the update to the notification-area menu. The Microsoft Store version is updated by the Store instead

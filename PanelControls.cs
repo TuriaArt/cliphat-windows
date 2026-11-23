@@ -12,12 +12,12 @@ internal static class Theme
     /// The accent presets offered in Settings: (code, display name, color).
     public static readonly (string Code, string Name, Color Color)[] Accents =
     [
-        ("blue", "Blue", Color.FromArgb(0, 122, 255)),
-        ("purple", "Purple", Color.FromArgb(142, 68, 173)),
-        ("green", "Green", Color.FromArgb(34, 160, 107)),
-        ("orange", "Orange", Color.FromArgb(230, 126, 34)),
-        ("red", "Red", Color.FromArgb(192, 57, 43)),
-        ("teal", "Teal", Color.FromArgb(22, 168, 168))
+        ("blue", "Blue", Color.FromArgb(33, 150, 255)),
+        ("purple", "Purple", Color.FromArgb(156, 95, 255)),
+        ("green", "Green", Color.FromArgb(46, 204, 113)),
+        ("orange", "Orange", Color.FromArgb(255, 145, 0)),
+        ("red", "Red", Color.FromArgb(235, 78, 68)),
+        ("teal", "Teal", Color.FromArgb(26, 202, 200))
     ];
 
     public static ThemeMode Mode { get; private set; } = ThemeMode.Light;
