@@ -16,7 +16,7 @@ internal sealed class ViewerWindow : Form
         box = new TextBox
         {
             Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Both, WordWrap = false,
-            Anchor = AnchorStyles.Fill, Font = new Font("Segoe UI", 10),
+            Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, Font = new Font("Segoe UI", 10),
             BackColor = Theme.Input, ForeColor = Theme.Ink, Margin = new Padding(10, 10, 10, 44)
         };
         box.Text = text;
