@@ -54,7 +54,7 @@ internal sealed class ViewerWindow : Form
         var info = new Label
         {
             Dock = DockStyle.Fill, Margin = new Padding(16), AutoSize = false,
-            TextAlignment = ContentAlignment.MiddleCenter, Font = new Font("Segoe UI", 11),
+            TextAlign = ContentAlignment.MiddleCenter, Font = new Font("Segoe UI", 11),
             BackColor = Theme.Input, ForeColor = Theme.Ink
         };
         var fi = new FileInfo(filePath);
