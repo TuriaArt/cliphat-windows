@@ -120,11 +120,11 @@ internal sealed class MainWindow : Form
         try
         {
             if (item.Kind == "text")
-                new ViewerWindow(item.FileName ?? t.Text, item.Text).Show();
+                ViewerWindow.ForText(item.FileName ?? t.Text, item.Text).Show();
             else if (item.Kind == "image" && item.Payload != null)
-                new ViewerWindow(item.FileName ?? t.ImageCaption, item.Payload).Show();
+                ViewerWindow.ForImage(item.FileName ?? t.ImageCaption, item.Payload).Show();
             else if (item.Kind is "document" or "audio" && item.Payload != null)
-                new ViewerWindow(item.FileName ?? t.Text, item.Payload, item.Kind).Show();
+                ViewerWindow.ForFile(item.FileName ?? t.Text, item.Payload, item.Kind).Show();
             else if (item.Kind == "link" && Uri.TryCreate(item.Text, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https")
                 Process.Start(new ProcessStartInfo(item.Text) { UseShellExecute = true });
             else if (item.Payload != null) Process.Start(new ProcessStartInfo(item.Payload) { UseShellExecute = true });
